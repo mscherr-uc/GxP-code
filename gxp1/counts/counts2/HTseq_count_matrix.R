@@ -1,10 +1,6 @@
 samples <- read.table("/wsu/home/hm/hm80/hm8004/piquelab/Dany/gxp1/counts/names.txt", sep="\t")
 samples <- as.character(samples[,1])
 
-# loop through every .cnts file to extract numbers of aligned and non-aligned reads and save the fraction:
-# and make GE matrix:
-# check how many lines in a random file (all should be equal):
-#system(' less GMCcol2-88U4.cnts | wc -l')
 n=60612
 matrix <- matrix(nrow=n)
 df <- data.frame(matrix)
