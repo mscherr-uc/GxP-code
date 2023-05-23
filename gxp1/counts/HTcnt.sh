@@ -1,6 +1,6 @@
 #!/bin/bash
 # Job name
-#SBATCH --job-name aligning_220324
+#SBATCH --job-name counting_220324
 # Submit to the primary QoS
 #SBATCH -q primary
 # Request one node
