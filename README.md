@@ -1,5 +1,5 @@
 # GxP-code
-This repository contains all scripts files of the GxP project. This repository has been superseeded by the (GxP)[git@github.com:piquelab/GxP.git]
+This repository contains all scripts files of the GxP project. This repository has been superseeded by the (GxP)[github.com:piquelab/GxP.git]
 
 # General report
 This document contains all the analysis performed so far for the gxp project.
