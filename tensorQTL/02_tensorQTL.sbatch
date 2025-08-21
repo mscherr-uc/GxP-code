@@ -6,7 +6,6 @@
 #SBATCH -t 08:00:00
 #SBATCH -o %x.%A_%a.out
 #SBATCH -e %x.%A_%a.err
-#SBATCH --array=1-N   # <-- replace N after you build the condition table (see submit step)
 
 set -euo pipefail
 
@@ -20,10 +19,9 @@ mkdir -p "${OUT_DIR}"
 # --- environment (edit to match your env) ---
 module purge
 module load plink/2.0
-import pandas as pd
-import torch
-import tensorqtl
-from tensorqtl import pgen, cis, trans, post
+module load Anaconda3
+source activate tensorqtl_p3.11
+export LD_LIBRARY_PATH=/wsu/el7/groups/piquelab/R/4.3.2/lib64/R/lib:$LD_LIBRARY_PATH
 
 python3 -m tensorqtl --help >/dev/null 2>&1 || { echo "tensorQTL not on PATH/venv"; exit 1; }
 
