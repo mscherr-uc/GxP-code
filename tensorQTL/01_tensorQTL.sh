@@ -60,7 +60,9 @@ wc -l "${OUT_TSV}"
 # Count data lines (minus header)
 N=$(( $(wc -l < "${OUT_TSV}") - 1 ))
 
+echo "N = $N"
+
 ## SUBMIT WITH ARRAY SIZED TO N
-sbatch --array=1-"$N" 02_tensorqtl.sbatch
+# sbatch --array=1-"$N" 02_tensorqtl.sbatch
 
 
