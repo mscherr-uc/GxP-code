@@ -19,7 +19,6 @@ mkdir -p "${OUT_DIR}"
 # --- environment (edit to match your env) ---
 module purge
 module load plink/2.0
-module load Anaconda3
 source activate tensorqtl_p3.11
 export LD_LIBRARY_PATH=/wsu/el7/groups/piquelab/R/4.3.2/lib64/R/lib:$LD_LIBRARY_PATH
 
