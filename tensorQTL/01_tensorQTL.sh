@@ -43,28 +43,19 @@ for bed in "${beds[@]}"; do
   # sorted BED filename
   sorted_bed="${BASE}/GxP-eQTL_${cond}_qnorm_genotypePC_COMBATNone_corrected.sorted.bed.gz"
 
-  # Check if sorted BED exists; if not, create it
-  if [[ ! -s "${sorted_bed}" ]]; then
+# Check if sorted BED exists; if not, create it
+ if [[ ! -s "$sorted_bed" ]]; then
     echo "Creating sorted BED with header for ${cond}..."
-    
-    # Determine number of sample columns (all columns after first 4)
-    n_samples=$(zcat "$bed" | head -1 | awk '{print NF-4}')
-    
-    # Build header
-    header="#chr\tstart\tend\tid"
-    for i in $(seq 1 $n_samples); do
-      header="${header}\tSAMPLE${i}"
-    done
-    
-    # Add header and sort
-    zcat "$bed" | awk -v h="$header" 'BEGIN{print h}{print $0}' | sort -k1,1 -k2,2n | gzip > "$sorted_bed"
+
+    # Sort the BED file while preserving the original header
+    (zcat "$bed" | head -1; zcat "$bed" | tail -n +2 | sort -k1,1 -k2,2n) | gzip > "$sorted_bed"
   fi
 
   cov="${BASE}/GxP-eQTL_${cond}-SV-COMBATNone-FastQTL.txt"
   if [[ ! -s "${cov}" ]]; then
     echo "WARNING: Missing covariates for ${cond}: ${cov}" >&2
     continue
-  fi
+ fi
 
   echo -e "${cond}\t${sorted_bed}\t${cov}" >> "${OUT_TSV}"
 done
