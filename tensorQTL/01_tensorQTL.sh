@@ -20,14 +20,9 @@ plink2 \
 
 echo "Done. PLINK2 prefix: ${OUT_PREFIX}"
 
-
-## BUILD CONDITION TABLE
+## BUILD CONDITION TABLE (updated for tensorQTL)
 
 OUT_TSV="${BASE}/tensor/tensorqtl_conditions.tsv"
-
-# Patterns specific to GxP files:
-#   BED: GxP-eQTL_<COND>_qnorm_genotypePC_COMBATNone_corrected.bed.gz
-#   COV: GxP-eQTL_<COND>-SV-COMBATNone-FastQTL.txt
 
 shopt -s nullglob
 beds=( "${BASE}"/GxP-eQTL_*_qnorm_genotypePC_COMBATNone_corrected.bed.gz )
@@ -45,13 +40,33 @@ for bed in "${beds[@]}"; do
   cond="${fname#GxP-eQTL_}"
   cond="${cond%_qnorm_genotypePC_COMBATNone_corrected.bed.gz}"
 
+  # sorted BED filename
+  sorted_bed="${BASE}/GxP-eQTL_${cond}_qnorm_genotypePC_COMBATNone_corrected.sorted.bed.gz"
+
+  # Check if sorted BED exists; if not, create it
+  if [[ ! -s "${sorted_bed}" ]]; then
+    echo "Creating sorted BED with header for ${cond}..."
+    
+    # Determine number of sample columns (all columns after first 4)
+    n_samples=$(zcat "$bed" | head -1 | awk '{print NF-4}')
+    
+    # Build header
+    header="#chr\tstart\tend\tid"
+    for i in $(seq 1 $n_samples); do
+      header="${header}\tSAMPLE${i}"
+    done
+    
+    # Add header and sort
+    zcat "$bed" | awk -v h="$header" 'BEGIN{print h}{print $0}' | sort -k1,1 -k2,2n | gzip > "$sorted_bed"
+  fi
+
   cov="${BASE}/GxP-eQTL_${cond}-SV-COMBATNone-FastQTL.txt"
   if [[ ! -s "${cov}" ]]; then
     echo "WARNING: Missing covariates for ${cond}: ${cov}" >&2
     continue
   fi
 
-  echo -e "${cond}\t${bed}\t${cov}" >> "${OUT_TSV}"
+  echo -e "${cond}\t${sorted_bed}\t${cov}" >> "${OUT_TSV}"
 done
 
 echo "Wrote ${OUT_TSV}"
@@ -59,8 +74,8 @@ wc -l "${OUT_TSV}"
 
 # Count data lines (minus header)
 N=$(( $(wc -l < "${OUT_TSV}") - 1 ))
-
 echo "N = $N"
+
 
 ## SUBMIT WITH ARRAY SIZED TO N
 # sbatch --array=1-"$N" 02_tensorqtl.sbatch
