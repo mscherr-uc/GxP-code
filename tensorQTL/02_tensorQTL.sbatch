@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 #SBATCH -J tQTL_cis
-#SBATCH -p standard
-#SBATCH -c 4
+#SBATCH -q primary
+#SBATCH -n 4
 #SBATCH --mem=24G
 #SBATCH -t 08:00:00
 #SBATCH -o %x.%A_%a.out
@@ -56,3 +56,4 @@ python3 -m tensorqtl \
   -o "${OUT_DIR}"
 
 echo "[$(date)] Done."
+
