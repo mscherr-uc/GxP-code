@@ -4,6 +4,8 @@
 # prereq: ./mashr-fit-model.R
 # 9/16/25 MS
 
+#sbatch run with ./submit_chunks.sh 500
+
 library(ashr)
 library(mashr)
 library(data.table)
