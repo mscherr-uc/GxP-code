@@ -60,6 +60,6 @@ write.table(m.chunk$lfdr,paste0("output/lfdr/all_chunk", chunk,".txt"),sep="\t",
 write.table(m.chunk$NegativeProb,paste0("output/NegativeProb/all_chunk", chunk,".txt"),sep="\t",quote=F, row.names=T,col.names=F)
 
 
-### END 1/25/2021 JR
+### END
 
 sessionInfo()
