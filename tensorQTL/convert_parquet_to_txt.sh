@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 # Convert TensorQTL parquet files to tab-delimited text files
 
 set -euo pipefail
@@ -32,10 +32,10 @@ for parquet_file in "${PARQUET_FILES[@]}"; do
     # Get base filename without extension
     base_name=$(basename "${parquet_file}" .parquet)
     txt_file="${OUTPUT_DIR}/${base_name}.txt"
-
+    
     echo ""
     echo "Converting: $(basename "${parquet_file}")"
-
+    
     # Use Python to convert parquet to txt
     python3 << EOF
 import pandas as pd
@@ -45,16 +45,16 @@ import os
 try:
     # Read parquet file
     df = pd.read_parquet('${parquet_file}')
-
+    
     print(f"  Shape: {df.shape[0]:,} rows x {df.shape[1]} columns")
     print(f"  Columns: {', '.join(df.columns)}")
-
+    
     # Save as tab-delimited text file
     df.to_csv('${txt_file}', sep='\t', index=False)
-
+    
     print(f"  Saved: $(basename "${txt_file}")")
     print(f"  Size: $(du -h "${txt_file}" | cut -f1)")
-
+    
 except Exception as e:
     print(f"  ERROR: {e}")
     sys.exit(1)
@@ -85,7 +85,7 @@ if [[ ${converted} -gt 0 ]]; then
     echo ""
     echo "Sample of converted files:"
     ls -lh "${OUTPUT_DIR}" | head -10
-
+    
     echo ""
     echo "Quick preview of first converted file:"
     first_txt=$(ls "${OUTPUT_DIR}"/*.txt | head -1)
@@ -95,5 +95,3 @@ fi
 
 echo ""
 echo "Conversion complete!"
-
-
