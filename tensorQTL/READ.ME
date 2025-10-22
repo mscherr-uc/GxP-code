@@ -6,5 +6,5 @@
  -- Need file with directories for 02_tensorQTL with columns: condition, bed, covariates
 - Ran 02_tensorQTL.sbatch using command 
     sbatch --array=1-8 02_tensorQTL.sbatch
-- For cis-nominal mode files, use convert_parquet_to_txt.sh as is
-- Ran /wsu/el7/groups/piquelab/R/4.1.0/bin/Rscript tQTL_fdr_analysis.R 
+- For cis-nominal mode files, use convert_parquet_to_txt.sh to generate usable files for mash
+- Run analysis for cis mode summary using /wsu/el7/groups/piquelab/R/4.1.0/bin/Rscript tQTL_fdr_analysis.R 
