@@ -51,11 +51,11 @@ for bed in "${beds[@]}"; do
     (zcat "$bed" | head -1; zcat "$bed" | tail -n +2 | sort -k1,1 -k2,2n) | gzip > "$sorted_bed"
   fi
 
-  cov="${BASE}/GxP-eQTL_${cond}-SV-COMBATNone-FastQTL.txt"
+  cov="${BASE}/covariates/GxP-eQTL_${cond}-SV1-15.covariates-COMBATNone-FastQTL.txt"
   if [[ ! -s "${cov}" ]]; then
     echo "WARNING: Missing covariates for ${cond}: ${cov}" >&2
     continue
- fi
+  fi
 
   echo -e "${cond}\t${sorted_bed}\t${cov}" >> "${OUT_TSV}"
 done
@@ -69,6 +69,4 @@ echo "N = $N"
 
 
 ## SUBMIT WITH ARRAY SIZED TO N
-# sbatch --array=1-"$N" 02_tensorqtl.sbatch
-
-
+ sbatch --array=1-"$N" 02_tensorqtl.sbatch
